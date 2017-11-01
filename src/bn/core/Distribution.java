@@ -74,4 +74,25 @@ public class Distribution extends LinkedHashMap<Object,Double> {
 	}
     }
 
+    /**
+     * Sample random value from this distribution.
+     */
+    public Object randomSample() {
+        normalize();
+        List<Object> keys = new ArrayList<Object>(keySet());
+        //System.out.println(keys.toString());
+        List<Double> probabilities = new ArrayList<Double>(keys.size());
+        probabilities.add(get(keys.get(0)));
+        for (int index = 1; index < keys.size(); index++) {
+            probabilities.add(probabilities.get(index - 1) + get(keys.get(index)));
+        }
+        //System.out.println(probabilities.toString());
+        double rnd = new Random().nextDouble();
+        for (int index = 0; index < keys.size(); index++) {
+            if (rnd <= probabilities.get(index))
+                return keys.get(index);
+        }
+        return keys.get(keys.size() - 1);
+    }
+
 }

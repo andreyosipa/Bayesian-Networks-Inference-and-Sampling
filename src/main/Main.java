@@ -5,48 +5,39 @@ import bn.core.BayesianNetwork;
 import bn.core.Distribution;
 import bn.core.RandomVariable;
 import bn.parser.XMLBIFParser;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
-/**
- * Created by Andrey on 31.10.17.
- */
 public class Main {
     public static void main(String[] args) {
         BayesianNetwork bayesianNetwork;
         try {
-             bayesianNetwork = new XMLBIFParser().readNetworkFromFile("src/bn/examples/aima-alarm.xml");
+             bayesianNetwork = new XMLBIFParser().readNetworkFromFile("src/bn/examples/dog-problem.xml");
         } catch (Exception e) {
             e.printStackTrace();
             bayesianNetwork = new BayesianNetwork();
         }
 
-        System.out.println(bayesianNetwork.getChildren(bayesianNetwork.getVariableByName("B")));
-
         List<RandomVariable> vars = bayesianNetwork.getVariableList();
-        Distribution distribution = new InferenceByEnum().ask(bayesianNetwork, vars.get(0), new Assignment());
-        distribution.normalize();
-        System.out.print(vars.get(0));
-        System.out.println(distribution.toString());
-        distribution = new InferenceByEnum().ask(bayesianNetwork, vars.get(1), new Assignment());
-        distribution.normalize();
-        System.out.print(vars.get(1));
-        System.out.println(distribution.toString());
-        distribution = new InferenceByEnum().ask(bayesianNetwork, vars.get(2), new Assignment());
-        distribution.normalize();
-        System.out.print(vars.get(2));
-        System.out.println(distribution.toString());
-        distribution = new InferenceByEnum().ask(bayesianNetwork, vars.get(3), new Assignment());
-        distribution.normalize();
-        System.out.print(vars.get(3));
-        System.out.println(distribution.toString());
-        distribution = new InferenceByEnum().ask(bayesianNetwork, vars.get(4), new Assignment());
-        distribution.normalize();
-        System.out.print(vars.get(4));
-        System.out.println(distribution.toString());
+
+        Distribution distribution;
+        int num_trials = 10000;
+        for (int idx = 0; idx < vars.size(); idx++) {
+            distribution = new InferenceByEnum().ask(bayesianNetwork, vars.get(idx), new Assignment());
+            System.out.print(vars.get(idx));
+            System.out.println(distribution.toString());
+
+            distribution = new RejectionSampling().ask(bayesianNetwork, vars.get(idx), new Assignment(), num_trials);
+            System.out.print(vars.get(idx));
+            System.out.println(distribution.toString());
+
+            distribution = new LikelihoodWeighting().ask(bayesianNetwork, vars.get(idx), new Assignment(), num_trials);
+            System.out.print(vars.get(idx));
+            System.out.println(distribution.toString());
+
+            distribution = new GibbsSampling().ask(bayesianNetwork, vars.get(idx), new Assignment(), num_trials);
+            System.out.print(vars.get(idx));
+            System.out.println(distribution.toString());
+        }
+
     }
 }
