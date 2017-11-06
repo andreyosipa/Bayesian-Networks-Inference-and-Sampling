@@ -58,4 +58,5 @@ public class GibbsSampling implements Sampler {
         resultDistribution.normalize();
         return resultDistribution;
     }
+
 }

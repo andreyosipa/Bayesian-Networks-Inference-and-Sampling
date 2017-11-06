@@ -5,6 +5,11 @@
  * Time-stamp: <Wed Mar 28 15:06:37 EDT 2012 ferguson>
  */
 
+/*
+ * Modified by: Andrii Osipa
+ * Lines: 82...102
+ */
+
 package bn.core;
 
 import java.util.*;
@@ -75,6 +80,7 @@ public class Distribution extends LinkedHashMap<Object,Double> {
     }
 
     /**
+     * Author: Andrii Osipa
      * Sample random value from this distribution.
      */
     public Object randomSample() {

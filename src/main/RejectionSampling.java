@@ -25,7 +25,7 @@ public class RejectionSampling implements Sampler{
             randomAssignment = priorSample(bn);
             boolean consistent = true;
             for (Object key : e.keySet()) {
-                consistent = consistent && (e.get(key) == randomAssignment.get(key));
+                consistent = consistent && (e.get(key).equals(randomAssignment.get(key)));
             }
             if (consistent) {
                 resultDistribution.put(randomAssignment.get(X), resultDistribution.get(randomAssignment.get(X)) + 1);

@@ -48,16 +48,15 @@ public class LikelihoodWeighting implements Sampler {
                 event.event.set(v, temporaryDistribution.randomSample());
             }
         }
-
         return event;
     }
 
     protected class WeightedEvent {
-        public int weight;
+        public double weight;
         public Assignment event;
 
         WeightedEvent(Assignment e) {
-            this.weight = 1;
+            this.weight = 1.0;
             this.event = e.copy();
         }
     }
